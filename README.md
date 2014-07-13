@@ -5,7 +5,7 @@ Tools for Modelling MFS Call Data
 
 Video Link
 ==========
-http://youtu.be/ZNLhqA8by_o Shiny Red Mining
+http://youtu.be/kLt-dwZS4oU Shiny Red Mining 2
 
 Results
 ===============
