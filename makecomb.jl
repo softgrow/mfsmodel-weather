@@ -1,8 +1,25 @@
-# Use the Datetime library for date and time manipulations (use Pkg.add("Datetime") first time)
-using Datetime
+# If a library is not found use Pkg.add("Datetime") from the Julia command line to add
+# to the libraries available on this machine.
+# The very first time you will get Unable to read directory METADATA
+# so set the directory ENV["JULIA_PKGDIR"] = "c:/Users/simag001/.julia"
+# then Pkg.Init()
+# Use the Datetime library for date and time manipulations
+# This is deprecated, should be using Dates and Julia 0.3
+# Check version using versioninfo()
+using Dates
+
+source_file="mfs.csv"
+# Make sure we can read our data file
+if (!isfile(source_file))
+   # We need to fetch the file
+   download("http://data.sa.gov.au/storage/f/2014-06-26T05%3A25%3A56.821Z/samfs-data-may-01-2009-to-30-apr-2014.csv", source_file)
+   if (!isfile(source_file))
+      error("Tried to download $source_file and that didn't work, giving up")
+   end
+end
 
 # Read in the file 
-d2=readlines(open("mfs.csv"));
+d2=readlines(open(source_file));
 # Create a dictionary to hold all of the incidents
 type Incident
  idnum::Int
@@ -15,16 +32,16 @@ calllog=Dict{DateTime,Incident}()
 for thiselem in d2[2:end]
  eachelem=split(chomp(thiselem),',',4)
  # should check for collisions
- calllog[datetime(int(eachelem[2][1:4]),int(eachelem[2][6:7]),int(eachelem[2][9:10]),int(eachelem[2][12:13]),int(eachelem[2][15:16]),int(eachelem[2][18:19]),0,"Adelaide/Australia")]=Incident(int(eachelem[1]),datetime(int(eachelem[2][1:4]),int(eachelem[2][6:7]),int(eachelem[2][9:10]),int(eachelem[2][12:13]),int(eachelem[2][15:16]),int(eachelem[2][18:19]),0,"Adelaide/Australia"),eachelem[3],eachelem[4])
+ calllog[DateTime(int(eachelem[2][1:4]),int(eachelem[2][6:7]),int(eachelem[2][9:10]),int(eachelem[2][12:13]),int(eachelem[2][15:16]),int(eachelem[2][18:19]),0)]=Incident(int(eachelem[1]),DateTime(int(eachelem[2][1:4]),int(eachelem[2][6:7]),int(eachelem[2][9:10]),int(eachelem[2][12:13]),int(eachelem[2][15:16]),int(eachelem[2][18:19]),0),eachelem[3],eachelem[4])
  end
 outfil=open("comb.csv","w")
 # print a header
 println(outfil,"Fire,Incdate,dayofweek,hour,month");
  # Iterate through each time loading a fire or not
-thisdate=datetime(2009,5,1,0,0,0,0,"Adelaide/Australia")
+thisdate=DateTime(2009,5,1,0,0,0,0)
 zeroskipped=0
 linesprinted=0
-while thisdate < datetime(2013,5,1,0,0,0,0,"Adelaide/Australia")
+while thisdate < DateTime(2013,5,1,0,0,0,0)
   zeroskipped=zeroskipped+1
   if (haskey(calllog,thisdate))
     if linesprinted < 1
@@ -41,6 +58,6 @@ while thisdate < datetime(2013,5,1,0,0,0,0,"Adelaide/Australia")
       zeroskipped=0
       linesprinted=0
     end
- thisdate=thisdate+minute(1)
+ thisdate=thisdate+Dates.Minute(1)
 end
 close(outfil)
