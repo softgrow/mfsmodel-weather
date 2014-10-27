@@ -3,16 +3,18 @@ MFS-Modelling
 
 Tools for Modelling MFS Call Data
 
-Video Link
-==========
-http://youtu.be/kLt-dwZS4oU Shiny Red Mining 2
-
 Results
 ===============
     Coefficients:
-             Estimate     Std. Error   z value      Pr(>|z|)   
-    (Intercept)   -5.298e+00    4.717e-02   -1.123e+02    0.000e+00
-    dayofweek      5.323e-02    8.058e-03    6.605e+00    4.029e-11
-    hour           8.263e-02    2.480e-03    3.331e+01   1.321e-239
-    month         -2.075e-02    4.671e-03   -4.443e+00    8.892e-06
+                 Estimate     Std. Error   z value      Pr(>|z|)
+    (Intercept)   -3.865e+00    4.677e-02   -8.265e+01    0.000e+00
+    dayofweek      3.568e-02    7.268e-03    4.909e+00    9.164e-07
+    hour           8.541e-02    2.250e-03    3.796e+01   3.168e-310
+    month         -1.997e-02    4.217e-03   -4.735e+00    2.197e-06
 
+    Degrees of Freedom: 43823 Total (i.e. Null);  43820 Residual
+    Null Deviance:      33700
+    Residual Deviance: 32080        AIC: 32090
+
+    Prior correction performed with tau = 0.04740437
+    Rare events bias correction performed
