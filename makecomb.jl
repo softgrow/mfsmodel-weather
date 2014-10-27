@@ -41,7 +41,7 @@ println(outfil,"Fire,Incdate,dayofweek,hour,month");
 thisdate=DateTime(2009,5,1,0,0,0,0)
 zeroskipped=0
 linesprinted=0
-while thisdate < DateTime(2013,5,1,0,0,0,0)
+while thisdate < DateTime(2014,5,1,0,0,0,0)
   zeroskipped=zeroskipped+1
   if (haskey(calllog,thisdate))
     if linesprinted < 1
