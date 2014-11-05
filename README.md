@@ -3,8 +3,8 @@ MFS-Modelling
 
 Tools for Modelling MFS Call Data
 
-Results
-===============
+Results - Step 1
+================
     Coefficients:
                  Estimate     Std. Error   z value      Pr(>|z|)
     (Intercept)   -3.865e+00    4.677e-02   -8.265e+01    0.000e+00
@@ -19,6 +19,8 @@ Results
     Prior correction performed with tau = 0.04740437
     Rare events bias correction performed
 
+Results - Step 2 - Average Monthly Temp
+================
 	Coefficients:
              Estimate     Std. Error   z value      Pr(>|z|)   
 	(Intercept)   -4.425e+00    9.233e-02   -4.793e+01    0.000e+00
@@ -33,3 +35,22 @@ Results
 
 	Prior correction performed with tau = 0.04740437 
 	Rare events bias correction performed
+Results - Step 3 - Previous observed Temp
+================
+    Warning message:
+    glm.fit: itted probabilities numerically 0 or 1 occurred
+
+    Coefficients:
+                 Estimate     Std. Error   z value      Pr(>|z|)
+    (Intercept)   -4.675e+00    6.446e-02   -7.252e+01    0.000e+00
+    dayofweek      3.546e-02    7.299e-03    4.858e+00    1.189e-06
+    hour           7.395e-02    2.282e-03    3.241e+01   1.149e-227
+    month         -4.398e-03    4.567e-03   -9.629e-01    3.356e-01
+    temperature    5.114e-02    2.780e-03    1.840e+01    2.614e-75
+
+    Degrees of Freedom: 43823 Total (i.e. Null);  43819 Residual
+    Null Deviance:      33700
+    Residual Deviance: 31690        AIC: 31700
+
+    Prior correction performed with tau = 0.04740437
+    Rare events bias correction performed
