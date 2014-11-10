@@ -78,7 +78,7 @@ Results - Step 4 - Days of Week
     Rare events bias correction performed
 
 Results - Step 5 - Remove Operational Movements
- ================
+================
     Warning message:
     glm.fit: fitted probabilities numerically 0 or 1 occurred
 
@@ -95,6 +95,29 @@ Results - Step 5 - Remove Operational Movements
     Degrees of Freedom: 43823 Total (i.e. Null);  43817 Residual
     Null Deviance:      34380
     Residual Deviance: 32320        AIC: 32340
+
+    Prior correction performed with tau = 0.04411894
+    Rare events bias correction performed
+
+Results - Step 6 - Remove Increase sample size to give model more information on zeros
+================
+
+    Warning message:
+    glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+    Coefficients:
+                 Estimate    Std. Error  z value     Pr(>|z|)
+    (Intercept)  -3.975e+00   1.460e-02  -2.723e+02   0.000e+00
+    hour          3.024e-02   6.162e-04   4.908e+01   0.000e+00
+    temperature   2.898e-02   6.906e-04   4.196e+01   0.000e+00
+    IsMonday     -2.354e-02   1.285e-02  -1.832e+00   6.694e-02
+    IsThursday    9.195e-02   1.269e-02   7.245e+00   4.326e-13
+    IsFriday      1.399e-01   1.261e-02   1.110e+01   1.273e-28
+    IsSaturday    1.129e-01   1.264e-02   8.931e+00   4.249e-19
+
+    Degrees of Freedom: 262943 Total (i.e. Null);  262937 Residual
+    Null Deviance:      336400
+    Residual Deviance: 331200       AIC: 331200
 
     Prior correction performed with tau = 0.04411894
     Rare events bias correction performed

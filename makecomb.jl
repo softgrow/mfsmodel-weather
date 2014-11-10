@@ -56,7 +56,7 @@ while thisdate < DateTime(2014,5,1,0,0,0,0)
       linesprinted=linesprinted+1
     end
    end
-  if zeroskipped >=60
+  if zeroskipped >=10
     if linesprinted < 1
         print(outfil,"0")
         println(outfil,",\"",thisdate,"\",",dayofweek(thisdate),',',hour(thisdate),',',month(thisdate),',',get_adelaide_temp(thisdate),',',dayofweek(thisdate)==1?1:0,',',dayofweek(thisdate)==2?1:0,',',dayofweek(thisdate)==3?1:0,',',dayofweek(thisdate)==4?1:0,',',dayofweek(thisdate)==5?1:0,',',dayofweek(thisdate)==6?1:0,',',dayofweek(thisdate)==7?1:0)
