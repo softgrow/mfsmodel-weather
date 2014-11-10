@@ -38,7 +38,7 @@ Results - Step 2 - Average Monthly Temp
 Results - Step 3 - Previous observed Temp
 ================
     Warning message:
-    glm.fit: itted probabilities numerically 0 or 1 occurred
+    glm.fit: fitted probabilities numerically 0 or 1 occurred
 
     Coefficients:
                  Estimate     Std. Error   z value      Pr(>|z|)
@@ -54,3 +54,26 @@ Results - Step 3 - Previous observed Temp
 
     Prior correction performed with tau = 0.04740437
     Rare events bias correction performed
+
+Results - Step 4 - Days of Week
+================
+    Warning message:
+    glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+    Coefficients:
+                 Estimate     Std. Error   z value      Pr(>|z|)
+    (Intercept)   -4.634e+00    4.701e-02   -9.859e+01    0.000e+00
+    hour           7.391e-02    2.279e-03    3.243e+01   4.739e-228
+    temperature    5.157e-02    2.730e-03    1.890e+01    2.576e-79
+    IsMonday      -7.809e-02    4.278e-02   -1.825e+00    6.795e-02
+    IsThursday     1.099e-01    4.492e-02    2.447e+00    1.441e-02
+    IsFriday       1.456e-01    4.533e-02    3.213e+00    1.317e-03
+    IsSaturday     3.017e-01    4.734e-02    6.373e+00    1.868e-10
+
+    Degrees of Freedom: 43823 Total (i.e. Null);  43817 Residual
+    Null Deviance:      33700
+    Residual Deviance: 31650        AIC: 31660
+
+    Prior correction performed with tau = 0.04740437
+    Rare events bias correction performed
+

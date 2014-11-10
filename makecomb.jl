@@ -38,7 +38,7 @@ for thiselem in d2[2:end]
  end
 outfil=open("comb.csv","w")
 # print a header
-println(outfil,"Fire,Incdate,dayofweek,hour,month,temperature");
+println(outfil,"Fire,Incdate,dayofweek,hour,month,temperature,IsMonday,IsTuesday,IsWednesday,IsThursday,IsFriday,IsSaturday,IsSunday,IsMonday");
  # Iterate through each time loading a fire or not
 thisdate=DateTime(2009,5,1,0,0,0,0)
 zeroskipped=0
@@ -48,14 +48,14 @@ while thisdate < DateTime(2014,5,1,0,0,0,0)
   if (haskey(calllog,thisdate))
     if linesprinted < 1
       print(outfil,"1")
-      println(outfil,",\"",thisdate,"\",",dayofweek(thisdate),',',hour(thisdate),',',month(thisdate),',',get_adelaide_temp(thisdate))
+      println(outfil,",\"",thisdate,"\",",dayofweek(thisdate),',',hour(thisdate),',',month(thisdate),',',get_adelaide_temp(thisdate),',',dayofweek(thisdate)==1?1:0,',',dayofweek(thisdate)==2?1:0,',',dayofweek(thisdate)==3?1:0,',',dayofweek(thisdate)==4?1:0,',',dayofweek(thisdate)==5?1:0,',',dayofweek(thisdate)==6?1:0,',',dayofweek(thisdate)==7?1:0)
       linesprinted=linesprinted+1
     end
    end
   if zeroskipped >=60
     if linesprinted < 1
         print(outfil,"0")
-        println(outfil,",\"",thisdate,"\",",dayofweek(thisdate),',',hour(thisdate),',',month(thisdate),',',get_adelaide_temp(thisdate))
+        println(outfil,",\"",thisdate,"\",",dayofweek(thisdate),',',hour(thisdate),',',month(thisdate),',',get_adelaide_temp(thisdate),',',dayofweek(thisdate)==1?1:0,',',dayofweek(thisdate)==2?1:0,',',dayofweek(thisdate)==3?1:0,',',dayofweek(thisdate)==4?1:0,',',dayofweek(thisdate)==5?1:0,',',dayofweek(thisdate)==6?1:0,',',dayofweek(thisdate)==7?1:0)
       end
       zeroskipped=0
       linesprinted=0
