@@ -31,10 +31,14 @@ type Incident
 end
 calllog=Dict{DateTime,Incident}()
 # Iterate through the file loading each elem
+incidents_loaded=0
 for thiselem in d2[2:end]
  eachelem=split(chomp(thiselem),',',4)
- # should check for collisions
- calllog[DateTime(int(eachelem[2][1:4]),int(eachelem[2][6:7]),int(eachelem[2][9:10]),int(eachelem[2][12:13]),int(eachelem[2][15:16]),int(eachelem[2][18:19]),0)]=Incident(int(eachelem[1]),DateTime(int(eachelem[2][1:4]),int(eachelem[2][6:7]),int(eachelem[2][9:10]),int(eachelem[2][12:13]),int(eachelem[2][15:16]),int(eachelem[2][18:19]),0),eachelem[3],eachelem[4])
+ if eachelem[4]!="MUTUAL AID GIVEN/CHANGE OF QUARTERS"
+   # should check for collisions
+   incidents_loaded+=1
+   calllog[DateTime(int(eachelem[2][1:4]),int(eachelem[2][6:7]),int(eachelem[2][9:10]),int(eachelem[2][12:13]),int(eachelem[2][15:16]),int(eachelem[2][18:19]),0)]=Incident(int(eachelem[1]),DateTime(int(eachelem[2][1:4]),int(eachelem[2][6:7]),int(eachelem[2][9:10]),int(eachelem[2][12:13]),int(eachelem[2][15:16]),int(eachelem[2][18:19]),0),eachelem[3],eachelem[4])
+   end
  end
 outfil=open("comb.csv","w")
 # print a header
@@ -63,3 +67,5 @@ while thisdate < DateTime(2014,5,1,0,0,0,0)
  thisdate=thisdate+Dates.Minute(1)
 end
 close(outfil)
+# We know we are finished and how many incidents there were
+println("$incidents_loaded incidents loaded")

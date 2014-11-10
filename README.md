@@ -77,3 +77,24 @@ Results - Step 4 - Days of Week
     Prior correction performed with tau = 0.04740437
     Rare events bias correction performed
 
+Results - Step 5 - Remove Operational Movements
+ ================
+    Warning message:
+    glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+    Coefficients:
+                 Estimate     Std. Error   z value      Pr(>|z|)
+    (Intercept)   -4.688e+00    4.643e-02   -1.010e+02    0.000e+00
+    hour           7.312e-02    2.244e-03    3.259e+01   3.458e-230
+    temperature    5.060e-02    2.686e-03    1.883e+01    8.075e-79
+    IsMonday      -8.037e-02    4.223e-02   -1.903e+00    5.705e-02
+    IsThursday     1.158e-01    4.441e-02    2.607e+00    9.146e-03
+    IsFriday       1.417e-01    4.469e-02    3.171e+00    1.518e-03
+    IsSaturday     2.931e-01    4.659e-02    6.291e+00    3.192e-10
+
+    Degrees of Freedom: 43823 Total (i.e. Null);  43817 Residual
+    Null Deviance:      34380
+    Residual Deviance: 32320        AIC: 32340
+
+    Prior correction performed with tau = 0.04411894
+    Rare events bias correction performed
