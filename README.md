@@ -147,6 +147,23 @@ Results - Step 6a - Use case control=weighting
 
 Results - Step 6b - No Rare event correction
 ================
+    Warning message:
+    glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+    Coefficients:
+                 Estimate    Std. Error  z value     Pr(>|z|)
+    (Intercept)  -1.571e+00   1.460e-02  -1.076e+02   0.000e+00
+    hour          3.024e-02   6.162e-04   4.908e+01   0.000e+00
+    temperature   2.898e-02   6.906e-04   4.196e+01   0.000e+00
+    IsMonday     -2.355e-02   1.285e-02  -1.833e+00   6.679e-02
+    IsThursday    9.194e-02   1.269e-02   7.244e+00   4.358e-13
+    IsFriday      1.399e-01   1.261e-02   1.110e+01   1.287e-28
+    IsSaturday    1.129e-01   1.264e-02   8.930e+00   4.285e-19
+
+    Degrees of Freedom: 262943 Total (i.e. Null);  262937 Residual
+    Null Deviance:      336400
+    Residual Deviance: 331200       AIC: 331200
+    Rare events bias correction performed
 
 Results - Step 6c - Logit model only
 ================
