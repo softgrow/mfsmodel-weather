@@ -121,3 +121,36 @@ Results - Step 6 - Remove Increase sample size to give model more information on
 
     Prior correction performed with tau = 0.04411894
     Rare events bias correction performed
+
+Results - Step 6a - Use case control=weighting
+================
+
+    Warning message:
+    glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+    Coefficients:
+                 Estimate    Std. Error  z value     Pr(>|z|)
+    (Intercept)  -3.964e+00   3.361e-02  -1.179e+02   0.000e+00
+    hour          2.843e-02   1.377e-03   2.066e+01   1.028e-94
+    temperature   2.958e-02   1.539e-03   1.922e+01   2.843e-82
+    IsMonday     -2.264e-02   2.964e-02  -7.639e-01   4.449e-01
+    IsThursday    9.222e-02   2.890e-02   3.191e+00   1.418e-03
+    IsFriday      1.435e-01   2.857e-02   5.024e+00   5.068e-07
+    IsSaturday    1.090e-01   2.874e-02   3.794e+00   1.485e-04
+
+    Degrees of Freedom: 262943 Total (i.e. Null);  262937 Residual
+    Null Deviance:      95090
+    Residual Deviance: 94120        AIC: 15690
+
+    Weighting performed with tau = 0.04411894
+    Rare events bias correction performed
+
+Results - Step 6b - No Rare event correction
+================
+
+Results - Step 6c - Logit model only
+================
+
+Results - Step 6d - Julia logit model only
+================
+
