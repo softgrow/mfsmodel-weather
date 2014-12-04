@@ -100,5 +100,5 @@ df[:tempband5bz]=max(0,TempVec-40)
 # writetable("comb.csv",df)
 # We know we are finished and how many incidents there were
 println("$incidents_loaded incidents loaded")
-MNL= glm(Fire ~ hour + IsMonday + IsTuesday + IsWednesday+ IsThursday + IsFriday + IsSaturday + tempband2 + tempband4 + tempband5b1 + tempband5b2 + tempband5b3 + tempband5b4 + tempband5b5 + tempband5bz, df,Binomial(),LogitLink())
+MNL= glm(Fire ~ hour + IsMonday + IsTuesday + IsWednesday+ IsThursday + IsFriday + IsSaturday + tempband2 + tempband4 + tempband5b1 + tempband5b2 + tempband5b3 + tempband5b4 + tempband5b5 + tempband5bz, df, Poisson())
 
