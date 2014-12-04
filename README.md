@@ -168,6 +168,42 @@ Results - Step 6b - No Rare event correction
 Results - Step 6c - Logit model only
 ================
 
+    Warning message:
+    glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+    Deviance Residuals:
+        Min       1Q   Median       3Q      Max
+    -1.3130  -0.9394  -0.7978   1.3689   8.4904
+
+    Coefficients:
+                  Estimate Std. Error  z value Pr(>|z|)
+    (Intercept) -1.5712017  0.0145975 -107.635  < 2e-16 ***
+    hour         0.0302444  0.0006162   49.079  < 2e-16 ***
+    temperature  0.0289802  0.0006906   41.962  < 2e-16 ***
+    IsMonday    -0.0235660  0.0128482   -1.834   0.0666 .
+    IsThursday   0.0919263  0.0126911    7.243 4.38e-13 ***
+    IsFriday     0.1399055  0.0126063   11.098  < 2e-16 ***
+    IsSaturday   0.1128724  0.0126410    8.929  < 2e-16 ***
+    ---
+    Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+    (Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 336448  on 262943  degrees of freedom
+    Residual deviance: 331217  on 262937  degrees of freedom
+    AIC: 331231
+
+    Number of Fisher Scoring iterations: 4
+
 Results - Step 6d - Julia logit model only
 ================
 
+    Coefficients:
+                  Estimate   Std.Error  z value Pr(>|z|)
+    (Intercept)    -1.5712   0.0145975 -107.635   <1e-99
+    hour         0.0302444 0.000616235  49.0793   <1e-99
+    temperature  0.0289802 0.000690629   41.962   <1e-99
+    IsMonday     -0.023566   0.0128482 -1.83419   0.0666
+    IsThursday   0.0919263   0.0126911  7.24335   <1e-12
+    IsFriday      0.139906   0.0126063  11.0981   <1e-27
+    IsSaturday    0.112872    0.012641  8.92908   <1e-18

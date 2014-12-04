@@ -8,6 +8,7 @@
 # Check version using versioninfo()
 using Dates
 using DataArrays, DataFrames
+using GLM
 
 include("temp_func.jl")
 
@@ -60,7 +61,7 @@ while thisdate < DateTime(2014,5,1,0,0,0,0)
       linesprinted=linesprinted+1
     end
    end
-  if zeroskipped >=1
+  if zeroskipped >=10
     if linesprinted < 1
         push!(FireVec,0)
         push!(DateVec,thisdate)
@@ -96,6 +97,8 @@ df[:tempband5b3]=min(34-31,max(0,TempVec-31))
 df[:tempband5b4]=min(37-34,max(0,TempVec-34))
 df[:tempband5b5]=min(40-37,max(0,TempVec-37))
 df[:tempband5bz]=max(0,TempVec-40)
-writetable("comb.csv",df)
+# writetable("comb.csv",df)
 # We know we are finished and how many incidents there were
 println("$incidents_loaded incidents loaded")
+MNL= glm(Fire ~ hour + temperature + IsMonday + IsThursday + IsFriday + IsSaturday, df,Binomial(),LogitLink())
+
