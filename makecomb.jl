@@ -61,7 +61,7 @@ while thisdate < DateTime(2014,5,1,0,0,0,0)
       linesprinted=linesprinted+1
     end
    end
-  if zeroskipped >=10
+  if zeroskipped >=1
     if linesprinted < 1
         push!(FireVec,0)
         push!(DateVec,thisdate)
@@ -81,7 +81,7 @@ df[:month]=month(DateVec)
 df[:temperature]=TempVec
 df[:IsMonday]=0+(df[:dayofweek].==1)
 df[:IsTuesday]=0+(df[:dayofweek].==2)
-df[:IsWenesday]=0+(df[:dayofweek].==3)
+df[:IsWednesday]=0+(df[:dayofweek].==3)
 df[:IsThursday]=0+(df[:dayofweek].==4)
 df[:IsFriday]=0+(df[:dayofweek].==5)
 df[:IsSaturday]=0+(df[:dayofweek].==6)
@@ -100,5 +100,5 @@ df[:tempband5bz]=max(0,TempVec-40)
 # writetable("comb.csv",df)
 # We know we are finished and how many incidents there were
 println("$incidents_loaded incidents loaded")
-MNL= glm(Fire ~ hour + temperature + IsMonday + IsThursday + IsFriday + IsSaturday, df,Binomial(),LogitLink())
+MNL= glm(Fire ~ hour + IsMonday + IsTuesday + IsWednesday+ IsThursday + IsFriday + IsSaturday + tempband2 + tempband4 + tempband5b1 + tempband5b2 + tempband5b3 + tempband5b4 + tempband5b5 + tempband5bz, df,Binomial(),LogitLink())
 
