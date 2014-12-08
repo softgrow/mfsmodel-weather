@@ -24,23 +24,21 @@ end
 
 # Read in the file 
 d2=readlines(open(source_file));
-# Create a dictionary to hold all of the incidents
-type Incident
- idnum::Int
- idate::DateTime
- istation::ASCIIString
- icalltype::ASCIIString
-end
-calllog=Dict{DateTime,Incident}()
+# Create a dictionary to hold all incident times
+calllog=Dict{DateTime,Int}()
 # Iterate through the file loading each elem
 incidents_loaded=0
 for thiselem in d2[2:end]
  eachelem=split(chomp(thiselem),',',4)
  if eachelem[4]!="MUTUAL AID GIVEN/CHANGE OF QUARTERS"
-   # should check for collisions
+   thisdate=DateTime(int(eachelem[2][1:4]),int(eachelem[2][6:7]),int(eachelem[2][9:10]),int(eachelem[2][12:13]),int(eachelem[2][15:16]),int(eachelem[2][18:19]),0)
+    if ! haskey(calllog, thisdate)
+      calllog[thisdate]=1
+    else
+      calllog[thisdate]+=1
+    end
    incidents_loaded+=1
-   calllog[DateTime(int(eachelem[2][1:4]),int(eachelem[2][6:7]),int(eachelem[2][9:10]),int(eachelem[2][12:13]),int(eachelem[2][15:16]),int(eachelem[2][18:19]),0)]=Incident(int(eachelem[1]),DateTime(int(eachelem[2][1:4]),int(eachelem[2][6:7]),int(eachelem[2][9:10]),int(eachelem[2][12:13]),int(eachelem[2][15:16]),int(eachelem[2][18:19]),0),eachelem[3],eachelem[4])
-   end
+  end
  end
  # Iterate through each time loading a fire or not
 thisdate=DateTime(2009,5,1,0,0,0,0)
@@ -55,7 +53,8 @@ while thisdate < DateTime(2014,5,1,0,0,0,0)
   current_temp=get_adelaide_temp(thisdate)
   if (haskey(calllog,thisdate))
     if linesprinted < 1
-      push!(FireVec,1)
+      # use the number of incidents in this time slot
+      push!(FireVec,calllog[thisdate])
       push!(DateVec,thisdate)
       push!(TempVec,current_temp)
       linesprinted=linesprinted+1
