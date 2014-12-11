@@ -47,16 +47,22 @@ linesprinted=0
 FireVec=Int[]
 DateVec=DateTime[]
 TempVec=Float64[]
+DewpVec=Float64[]
+WindSpeedVec=Float64[]
 while thisdate < DateTime(2014,5,1,0,0,0,0)
   zeroskipped=zeroskipped+1
   # 12 15 18 22
   current_temp=get_adelaide_temp(thisdate)
+  current_dewp=get_adelaide_dewp(thisdate)
+  current_wind_speed=get_adelaide_wind_speed(thisdate)
   if (haskey(calllog,thisdate))
     if linesprinted < 1
       # use the number of incidents in this time slot
       push!(FireVec,calllog[thisdate])
       push!(DateVec,thisdate)
       push!(TempVec,current_temp)
+      push!(DewpVec,current_dewp)
+      push!(WindSpeedVec, current_wind_speed)
       linesprinted=linesprinted+1
     end
    end
@@ -65,6 +71,8 @@ while thisdate < DateTime(2014,5,1,0,0,0,0)
         push!(FireVec,0)
         push!(DateVec,thisdate)
         push!(TempVec,current_temp)
+        push!(DewpVec,current_dewp)
+        push!(WindSpeedVec, current_wind_speed)
       end
       zeroskipped=0
       linesprinted=0
@@ -91,7 +99,7 @@ df[:hour9to10]=min(10-9,max(0,hourfrac-9))
 df[:hour10to11]=min(11-10,max(0,hourfrac-10))
 df[:hour11to12]=min(12-11,max(0,hourfrac-11))
 df[:hour11to13]=min(13-11,max(0,hourfrac-11))
-df[:hour120to13]=min(13-12,max(0,hourfrac-12))
+df[:hour12to13]=min(13-12,max(0,hourfrac-12))
 df[:hour13to14]=min(14-13,max(0,hourfrac-13))
 df[:hour14to15]=min(15-14,max(0,hourfrac-14))
 df[:hour15to16]=min(16-15,max(0,hourfrac-15))
@@ -123,8 +131,11 @@ df[:tempband5b3]=min(34-31,max(0,TempVec-31))
 df[:tempband5b4]=min(37-34,max(0,TempVec-34))
 df[:tempband5b5]=min(40-37,max(0,TempVec-37))
 df[:tempband5bz]=max(0,TempVec-40)
+df[:dew_point]=DewpVec
+df[:relative_humidity]=100-5(TempVec-DewpVec)
+df[:wind_speed]=WindSpeedVec
 # writetable("comb.csv",df)
 # We know we are finished and how many incidents there were
 println("$incidents_loaded incidents loaded")
-MNL= glm(Fire ~ year + hour0to1+hour1to2+hour3to4+hour4to5+hour5to6+hour6to7+hour7to8+hour8to9+hour9to10+ hour10to11+hour11to13+hour15to16+hour16to17+hour17to18+hour18to19+ hour19to20+hour20to21+hour21to22+hour22to23+hour23to24 + IsMonday + IsTuesday + IsWednesday+ IsThursday + IsFriday + IsSaturday +tempband2 + tempband3+ tempband5a + tempband5b2 + tempband5b4 + tempband5b5 + tempband5bz, df, Poisson())
+MNL= glm(Fire ~ year + hour0to1+hour1to2+hour3to4+hour4to5+hour5to6+hour6to7+hour7to8+hour8to9+hour9to10+ hour10to11+hour12to13+hour15to16+hour16to17+hour17to18+hour18to19+ hour19to20+hour20to21+hour21to22+hour22to23+hour23to24 + IsMonday + IsTuesday + IsWednesday+ IsThursday + IsFriday + IsSaturday +tempband2 + tempband3 +tempband5a + tempband5b2 +tempband5b4 + tempband5b5 + tempband5bz + dew_point + wind_speed, df, Poisson())
 
