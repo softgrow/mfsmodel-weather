@@ -14,8 +14,9 @@ function get_adelaide_temp(current_time)
     end
     # File is gzipped, open inside a pipe
     dt=readlines(`c:\\cygwin64\\bin\\gzip -cd $wanted_file`)
-    # The file is in a fixed format
+    # The file is in a fixed format described at http://www1.ncdc.noaa.gov/pub/data/noaa/isd-lite/isd-lite-format.pdf
     # 2009 01 01 01   204    88 10127   220    87 -9999 -9999 -9999\n
+    # yyyy mm dd hh  temp  dewp press widir wispd skyco rain1 rain6
     for thiselem in dt
       push!(adelaide_temp_obs,met_obs(DateTime(int(thiselem[1:4]),int(thiselem[6:7]),int(thiselem[9:10]),int(thiselem[12:13]),0,0,0),int(thiselem[14:19])/10))
     end
