@@ -12,6 +12,89 @@ using GLM
 
 include("temp_func.jl")
 
+function predict_with_offset(temp_offset,min_month,max_month,airport_code)
+# Run through the whole five years and calculate the (1-prob0) value, ie expected value
+currdate=DateTime(2009,5,1,0,0,0,0)
+expected=0.0
+while currdate < DateTime(2014,5,1,0,0,0,0)
+  if (month(currdate)>=min_month && month(currdate)<=max_month)
+  # for reach currdate calculate the expected value
+  beta=coef(MNL)[1]
+  beta+=coef(MNL)[2]*(year(currdate)-2005)
+  # Handle the hour curve
+  hourfrac=hour(currdate)+minute(currdate)/60
+  beta+=coef(MNL)[3]*(min(1-0,max(0,hourfrac-0)))
+  beta+=coef(MNL)[4]*(min(2-1,max(0,hourfrac-1)))
+  beta+=coef(MNL)[5]*(min(4-3,max(0,hourfrac-3)))
+  beta+=coef(MNL)[6]*(min(5-4,max(0,hourfrac-4)))
+  beta+=coef(MNL)[7]*(min(6-5,max(0,hourfrac-5)))
+  beta+=coef(MNL)[8]*(min(7-6,max(0,hourfrac-6)))
+  beta+=coef(MNL)[9]*(min(8-7,max(0,hourfrac-7)))
+  beta+=coef(MNL)[10]*(min(9-8,max(0,hourfrac-8)))
+  beta+=coef(MNL)[11]*(min(10-9,max(0,hourfrac-9)))
+  beta+=coef(MNL)[12]*(min(11-10,max(0,hourfrac-10)))
+  beta+=coef(MNL)[13]*(min(13-12,max(0,hourfrac-12)))
+  beta+=coef(MNL)[14]*(min(16-15,max(0,hourfrac-15)))
+  beta+=coef(MNL)[15]*(min(17-16,max(0,hourfrac-16)))
+  beta+=coef(MNL)[16]*(min(18-17,max(0,hourfrac-17)))
+  beta+=coef(MNL)[17]*(min(19-18,max(0,hourfrac-18)))
+  beta+=coef(MNL)[18]*(min(20-19,max(0,hourfrac-19)))
+  beta+=coef(MNL)[19]*(min(21-20,max(0,hourfrac-20)))
+  beta+=coef(MNL)[20]*(min(22-21,max(0,hourfrac-21)))
+  beta+=coef(MNL)[21]*(min(23-22,max(0,hourfrac-22)))
+  beta+=coef(MNL)[22]*(min(24-23,max(0,hourfrac-23)))
+  # section for Date variables
+  if dayofweek(currdate)==1
+    beta+=coef(MNL)[23]
+  end
+  if dayofweek(currdate)==2
+    beta+=coef(MNL)[24]
+  end
+  if dayofweek(currdate)==3
+    beta+=coef(MNL)[25]
+  end
+  if dayofweek(currdate)==4
+    beta+=coef(MNL)[26]
+  end
+  if dayofweek(currdate)==5
+    beta+=coef(MNL)[27]
+  end
+  if dayofweek(currdate)==6
+    beta+=coef(MNL)[28]
+  end
+  # temperature section
+  if airport_code=="ADL"
+    currtemp=temp_offset+get_adelaide_temp(currdate)
+  else
+    currtemp=temp_offset+get_tokyo_temp(currdate)
+  end
+  beta+=coef(MNL)[29]*min(15-12,max(0,currtemp-12))
+  beta+=coef(MNL)[30]*min(18-15,max(0,currtemp-15))
+  beta+=coef(MNL)[31]*min(25-22,max(0,currtemp-22))
+  beta+=coef(MNL)[32]*min(31-28,max(0,currtemp-28))
+  beta+=coef(MNL)[33]*min(37-34,max(0,currtemp-34))
+  beta+=coef(MNL)[34]*min(40-37,max(0,currtemp-37))
+  beta+=coef(MNL)[35]*max(0,currtemp-40)
+  # dew point
+  if airport_code=="ADL"
+    beta+=coef(MNL)[36]*get_adelaide_dewp(currdate)
+  else
+    beta+=coef(MNL)[36]*get_tokyo_dewp(currdate)
+  end 
+  # wind speed
+  if airport_code=="ADL"
+    beta+=coef(MNL)[37]*get_adelaide_wind_speed(currdate)
+  else
+    beta+=coef(MNL)[37]*get_tokyo_wind_speed(currdate)
+  end
+  # for Poisson distribution we expected value is equal to lambda
+  expected+=exp(beta)
+  end
+  currdate=currdate+Dates.Minute(1)
+  end
+  return expected
+end
+
 source_file="mfs.csv"
 # Make sure we can read our data file
 if (!isfile(source_file))
@@ -138,4 +221,14 @@ df[:wind_speed]=WindSpeedVec
 # We know we are finished and how many incidents there were
 println("$incidents_loaded incidents loaded")
 MNL= glm(Fire ~ year + hour0to1+hour1to2+hour3to4+hour4to5+hour5to6+hour6to7+hour7to8+hour8to9+hour9to10+ hour10to11+hour12to13+hour15to16+hour16to17+hour17to18+hour18to19+ hour19to20+hour20to21+hour21to22+hour22to23+hour23to24 + IsMonday + IsTuesday + IsWednesday+ IsThursday + IsFriday + IsSaturday +tempband2 + tempband3 +tempband5a + tempband5b2 +tempband5b4 + tempband5b5 + tempband5bz + dew_point + wind_speed, df, Poisson())
-
+# Display the object
+MNL
+# Now go through and predict manually to extract the expected number of fires with a change in temperature
+println("Expected Value for 0 ", predict_with_offset(0,1,12,"ADL"))
+println("Expected Value for 1 ", predict_with_offset(1,1,12,"ADL"))
+println("Expected Value for 2 ", predict_with_offset(2,1,12,"ADL"))
+println("Expected Value for -1 ", predict_with_offset(-1,1,12,"ADL"))
+println("Expected Value for 0 ", predict_with_offset(0,1,12,"HND"))
+println("Expected Value for 1 ", predict_with_offset(1,1,12,"HND"))
+println("Expected Value for 2 ", predict_with_offset(2,1,12,"HND"))
+println("Expected Value for -1 ", predict_with_offset(-1,1,12,"HND"))
