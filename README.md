@@ -122,7 +122,7 @@ Results - Step 6 - Remove Increase sample size to give model more information on
     Prior correction performed with tau = 0.04411894
     Rare events bias correction performed
 
-Results - Step 6a - Use case control=weighting
+Results - Step 6a - Use case control weighting
 ================
 
     Warning message:
@@ -353,3 +353,46 @@ Step 9 - Add wind and dewpoint, Redo hour
     tempband5bz    0.100877   0.0527813  1.91123   0.0560
     dew_point    0.00403081 0.000732363  5.50384    <1e-7
     wind_speed   0.00228641  0.00125169  1.82666   0.0678
+
+Results Step 10 - Correct dew_point and wind_speed index
+============
+    Coefficients:
+                   Estimate   Std.Error  z value Pr(>|z|)
+    (Intercept)    -3.92155   0.0347398 -112.883   <1e-99
+    year          0.0485735  0.00199998   24.287   <1e-99
+    hour0to1      -0.200988   0.0452568 -4.44105    <1e-5
+    hour1to2      -0.166179    0.030757 -5.40297    <1e-7
+    hour3to4      -0.112263   0.0330683 -3.39488   0.0007
+    hour4to5      -0.123886   0.0436668 -2.83708   0.0046
+    hour5to6       0.173731   0.0434852  3.99517    <1e-4
+    hour6to7        0.28108   0.0391734  7.17527   <1e-12
+    hour7to8        0.42396    0.033208  12.7668   <1e-36
+    hour8to9       0.344182   0.0277467  12.4044   <1e-34
+    hour9to10      0.110088    0.024541  4.48589    <1e-5
+    hour10to11     -0.21348   0.0191038 -11.1747   <1e-28
+    hour12to13   -0.0874292   0.0131681 -6.63948   <1e-10
+    hour15to16     0.114861   0.0186957  6.14367    <1e-9
+    hour16to17   -0.0726822   0.0256929 -2.82888   0.0047
+    hour17to18     0.166447   0.0258148  6.44771    <1e-9
+    hour18to19    -0.225947   0.0263947 -8.56032   <1e-16
+    hour19to20   -0.0716924   0.0280904  -2.5522   0.0107
+    hour20to21   -0.0991559   0.0295285 -3.35797   0.0008
+    hour21to22   -0.0779293   0.0310023 -2.51366   0.0119
+    hour22to23      -0.1448   0.0334735  -4.3258    <1e-4
+    hour23to24   -0.0924354   0.0445279  -2.0759   0.0379
+    IsMonday       0.125757   0.0116404  10.8035   <1e-26
+    IsTuesday      0.211254   0.0114171  18.5034   <1e-75
+    IsWednesday    0.180139    0.011494  15.6724   <1e-54
+    IsThursday     0.214577   0.0114079  18.8094   <1e-78
+    IsFriday       0.263101   0.0112911  23.3017   <1e-99
+    IsSaturday     0.228731   0.0113744  20.1094   <1e-89
+    tempband2     0.0160776   0.0038257  4.20252    <1e-4
+    tempband3    -0.0109418  0.00341949 -3.19983   0.0014
+    tempband5a    0.0176293  0.00368066   4.7897    <1e-5
+    tempband5b2   0.0385233  0.00628796  6.12651    <1e-9
+    tempband5b4    0.048267   0.0154594  3.12218   0.0018
+    tempband5b5   0.0536702   0.0271161  1.97928   0.0478
+    tempband5bz    0.115059   0.0530725  2.16795   0.0302
+    dew_point    0.00390169 0.000729324  5.34974    <1e-7
+
+

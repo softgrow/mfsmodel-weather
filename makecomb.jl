@@ -82,11 +82,11 @@ while currdate < DateTime(2014,5,1,0,0,0,0)
     beta+=coef(MNL)[36]*get_tokyo_dewp(currdate)
   end 
   # wind speed
-  if airport_code=="ADL"
-    beta+=coef(MNL)[37]*get_adelaide_wind_speed(currdate)
-  else
-    beta+=coef(MNL)[37]*get_tokyo_wind_speed(currdate)
-  end
+  # if airport_code=="ADL"
+  #  beta+=coef(MNL)[37]*get_adelaide_wind_speed(currdate)
+  # else
+  #  beta+=coef(MNL)[37]*get_tokyo_wind_speed(currdate)
+  # end
   # for Poisson distribution we expected value is equal to lambda
   expected+=exp(beta)
   end
@@ -220,9 +220,7 @@ df[:wind_speed]=WindSpeedVec
 # writetable("comb.csv",df)
 # We know we are finished and how many incidents there were
 println("$incidents_loaded incidents loaded")
-MNL= glm(Fire ~ year + hour0to1+hour1to2+hour3to4+hour4to5+hour5to6+hour6to7+hour7to8+hour8to9+hour9to10+ hour10to11+hour12to13+hour15to16+hour16to17+hour17to18+hour18to19+ hour19to20+hour20to21+hour21to22+hour22to23+hour23to24 + IsMonday + IsTuesday + IsWednesday+ IsThursday + IsFriday + IsSaturday +tempband2 + tempband3 +tempband5a + tempband5b2 +tempband5b4 + tempband5b5 + tempband5bz + dew_point + wind_speed, df, Poisson())
-# Display the object
-MNL
+MNL= glm(Fire ~ year + hour0to1+hour1to2+hour3to4+hour4to5+hour5to6+hour6to7+hour7to8+hour8to9+hour9to10+ hour10to11+hour12to13+hour15to16+hour16to17+hour17to18+hour18to19+ hour19to20+hour20to21+hour21to22+hour22to23+hour23to24 + IsMonday + IsTuesday + IsWednesday+ IsThursday + IsFriday + IsSaturday +tempband2 + tempband3 +tempband5a + tempband5b2 +tempband5b4 + tempband5b5 + tempband5bz + dew_point , df, Poisson())
 # Now go through and predict manually to extract the expected number of fires with a change in temperature
 println("Expected Value for 0 ", predict_with_offset(0,1,12,"ADL"))
 println("Expected Value for 1 ", predict_with_offset(1,1,12,"ADL"))
