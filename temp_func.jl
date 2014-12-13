@@ -2,6 +2,7 @@ function make_sure_data_loaded(current_time)
   if (!haskey(got_temp_year, year(current_time)))
     # we don't have this year loaded
     # Open the file, if we cant give up
+    # Station list in ftp://ftp.ncdc.noaa.gov/pub/data/inventories/ISH-HISTORY.TXT
     wanted_site="946720"
     wanted_year=string(year(current_time))
     wanted_file="$wanted_site-99999-$wanted_year.gz"
@@ -13,7 +14,7 @@ function make_sure_data_loaded(current_time)
       end
     end
     # File is gzipped, open inside a pipe
-    dt=readlines(`c:\\cygwin64\\bin\\gzip -cd $wanted_file`)
+    dt=readlines(`gzip -cd $wanted_file`)
     # The file is in a fixed format described at http://www1.ncdc.noaa.gov/pub/data/noaa/isd-lite/isd-lite-format.pdf
     # 2009 01 01 01   204    88 10127   220    87 -9999 -9999 -9999\n
     # yyyy mm dd hh  temp  dewp press widir wispd skyco rain1 rain6
@@ -50,17 +51,77 @@ function get_adelaide_dewp(current_time)
   make_sure_data_loaded(current_time)
   # find the time immediately before the current time and return the adelaide airport observation
   # Dont forget to subtract 9.5 hours for UTC in the observations fro NASA
-  return adelaide_dewp_obs[searchsortedlast(adelaide_temp_obs,current_time-Dates.Hour(9)-Dates.Minute(30))].mtemp
+  return adelaide_dewp_obs[searchsortedlast(adelaide_dewp_obs,current_time-Dates.Hour(9)-Dates.Minute(30))].mtemp
 end
 
 function get_adelaide_wind_speed(current_time)
   make_sure_data_loaded(current_time)
   # find the time immediately before the current time and return the adelaide airport observation
   # Dont forget to subtract 9.5 hours for UTC in the observations fro NASA
-  return adelaide_wind_speed_obs[searchsortedlast(adelaide_temp_obs,current_time-Dates.Hour(9)-Dates.Minute(30))].mtemp
+  return adelaide_wind_speed_obs[searchsortedlast(adelaide_wind_speed_obs,current_time-Dates.Hour(9)-Dates.Minute(30))].mtemp
+end
+
+function make_sure_tokyo_loaded(current_time)
+  if (!haskey(got_tokyo_year, year(current_time)))
+    # we don't have this year loaded
+    # Open the file, if we cant give up
+    wanted_site="476710" # RJTT Haneda Tokyo International
+    wanted_year=string(year(current_time))
+    wanted_file="$wanted_site-99999-$wanted_year.gz"
+    if (!isfile(wanted_file))
+      # We need to fetch the file
+      download("ftp://ftp.ncdc.noaa.gov/pub/data/noaa/isd-lite/$wanted_year/$wanted_file", wanted_file)
+      if (!isfile(wanted_file))
+        error("Tried to download $source_file and that didn't work, giving up")
+      end
+    end
+    # File is gzipped, open inside a pipe
+    dt=readlines(`gzip -cd $wanted_file`)
+    # The file is in a fixed format described at http://www1.ncdc.noaa.gov/pub/data/noaa/isd-lite/isd-lite-format.pdf
+    # 2009 01 01 01   204    88 10127   220    87 -9999 -9999 -9999\n
+    # yyyy mm dd hh  temp  dewp press widir wispd skyco rain1 rain6
+    for thiselem in dt
+      if thiselem[14:19]!=" -9999" # Handle the missing value
+        push!(tokyo_temp_obs,met_obs(DateTime(int(thiselem[1:4]),int(thiselem[6:7]),int(thiselem[9:10]),int(thiselem[12:13]),0,0,0),int(thiselem[14:19])/10))
+      end
+      if thiselem[20:25]!=" -9999" # Handle the missing value
+        push!(tokyo_dewp_obs,met_obs(DateTime(int(thiselem[1:4]),int(thiselem[6:7]),int(thiselem[9:10]),int(thiselem[12:13]),0,0,0),int(thiselem[20:25])/10))
+      end
+      if thiselem[38:43]!=" -9999" # Handle the missing value
+        push!(tokyo_wind_speed_obs,met_obs(DateTime(int(thiselem[1:4]),int(thiselem[6:7]),int(thiselem[9:10]),int(thiselem[12:13]),0,0,0),int(thiselem[38:43])/10))
+      end
+    end
+    # Read in the data without altering the offset??
+    sort!(tokyo_temp_obs)
+    sort!(tokyo_dewp_obs)
+    sort!(tokyo_wind_speed_obs)
+    got_tokyo_year[year(current_time)]=true
+  end
+end
+
+function get_tokyo_temp(current_time)
+  make_sure_tokyo_loaded(current_time)
+  # find the time immediately before the current time and return the adelaide airport observation
+  # Dont forget to subtract 9 hours for UTC in the observations fro NASA
+  return tokyo_temp_obs[searchsortedlast(tokyo_temp_obs,current_time-Dates.Hour(9))].mtemp
+end
+
+function get_tokyo_dewp(current_time)
+  make_sure_tokyo_loaded(current_time)
+  # find the time immediately before the current time and return the adelaide airport observation
+  # Dont forget to subtract 9 hours for UTC in the observations fro NASA
+  return tokyo_dewp_obs[searchsortedlast(tokyo_dewp_obs,current_time-Dates.Hour(9))].mtemp
+end
+
+function get_tokyo_wind_speed(current_time)
+  make_sure_tokyo_loaded(current_time)
+  # find the time immediately before the current time and return the adelaide airport observation
+  # Dont forget to subtract 9.5 hours for UTC in the observations fro NASA
+  return tokyo_wind_speed_obs[searchsortedlast(tokyo_wind_speed_obs,current_time-Dates.Hour(9))].mtemp
 end
 
 got_temp_year=Dict{Int,Bool}()
+got_tokyo_year=Dict{Int,Bool}()
 
 type met_obs
  mdate::DateTime
@@ -71,3 +132,6 @@ Base.isless(x::DateTime,y::met_obs) = isless(x,y.mdate) # make searchsorted and 
 adelaide_temp_obs=met_obs[]
 adelaide_dewp_obs=met_obs[]
 adelaide_wind_speed_obs=met_obs[]
+tokyo_temp_obs=met_obs[]
+tokyo_dewp_obs=met_obs[]
+tokyo_wind_speed_obs=met_obs[]
