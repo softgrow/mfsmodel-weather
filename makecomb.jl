@@ -170,6 +170,17 @@ df[:dayofweek]=dayofweek(DateVec)
 df[:year]=year(DateVec)-2005
 df[:hour]=hour(DateVec)
 hourfrac=hour(DateVec)+minute(DateVec)/60
+df[:hourfrac]=hourfrac
+df[:hourfrac2]=hourfrac.^2
+df[:hourfrac3]=hourfrac.^3
+df[:hourfrac4]=hourfrac.^4
+df[:hourfrac5]=hourfrac.^5
+df[:hourfrac6]=hourfrac.^6
+df[:hourfrac7]=hourfrac.^7
+df[:hourfrac8]=hourfrac.^8
+df[:hourfrac9]=hourfrac.^9
+df[:hourfrac10]=hourfrac.^10
+df[:hourfrac11]=hourfrac.^11
 df[:hour0to1]=min(1-0,max(0,hourfrac-0))
 df[:hour1to2]=min(2-1,max(0,hourfrac-1))
 df[:hour2to3]=min(3-2,max(0,hourfrac-2))
@@ -197,6 +208,15 @@ df[:hour22to23]=min(23-22,max(0,hourfrac-22))
 df[:hour23to24]=min(24-23,max(0,hourfrac-23))
 df[:month]=month(DateVec)
 df[:temperature]=TempVec
+df[:temp2]=TempVec.^2
+df[:temp3]=TempVec.^3
+df[:temp4]=TempVec.^4
+df[:temp5]=TempVec.^5
+df[:temp6]=TempVec.^6
+df[:temp7]=TempVec.^7
+df[:temp8]=TempVec.^8
+df[:temp9]=TempVec.^9
+df[:temp10]=TempVec.^10
 df[:IsMonday]=0+(df[:dayofweek].==1)
 df[:IsTuesday]=0+(df[:dayofweek].==2)
 df[:IsWednesday]=0+(df[:dayofweek].==3)
@@ -216,18 +236,20 @@ df[:tempband5b4]=min(37-34,max(0,TempVec-34))
 df[:tempband5b5]=min(40-37,max(0,TempVec-37))
 df[:tempband5bz]=min(100-40,max(0,TempVec-40))
 df[:dew_point]=DewpVec
+df[:dew_point2]=DewpVec.^2
 df[:relative_humidity]=100-5(TempVec-DewpVec)
 df[:wind_speed]=WindSpeedVec
+df[:wind_speed2]=WindSpeedVec.^2
 # writetable("comb.csv",df)
 # We know we are finished and how many incidents there were
 println("$incidents_loaded incidents loaded")
-MNL= glm(Fire ~ year + hour0to1+hour1to2+hour3to4+hour4to5+hour5to6+hour6to7+hour7to8+hour8to9+hour9to10+ hour10to11+hour11to12+hour12to13+hour15to16+hour16to17+hour17to18+hour18to19+ hour19to20+hour20to21+hour21to22+hour22to23+hour23to24 + IsMonday + IsTuesday + IsWednesday+ IsThursday + IsFriday + IsSaturday +tempband2 + tempband3 +tempband4+ tempband5b1+tempband5b2 +tempband5b4 + tempband5b5 +dew_point+wind_speed , df, Poisson())
+MNL= glm(Fire ~ year + hourfrac+hourfrac2+hourfrac3+hourfrac4+hourfrac5+hourfrac6+hourfrac7+hourfrac8+hourfrac9 +hourfrac10+ IsMonday + IsTuesday + IsWednesday+ IsThursday + IsFriday + IsSaturday +temperature+temp2+temp3+temp4+temp5+temp6 +dew_point+dew_point2+wind_speed+wind_speed2 , df, Poisson())
 # Now go through and predict manually to extract the expected number of fires with a change in temperature
-println("Expected Value for 0 ", predict_with_offset(0.0,1,12,"ADL"))
-println("Expected Value for 1 ", predict_with_offset(1.0,1,12,"ADL"))
-println("Expected Value for 2 ", predict_with_offset(2.0,1,12,"ADL"))
-println("Expected Value for -1 ", predict_with_offset(-1.0,1,12,"ADL"))
-println("Expected Value for 0 ", predict_with_offset(0.0,1,12,"HND"))
-println("Expected Value for 1 ", predict_with_offset(1.0,1,12,"HND"))
-println("Expected Value for 2 ", predict_with_offset(2.0,1,12,"HND"))
-println("Expected Value for -1 ", predict_with_offset(-1.0,1,12,"HND"))
+#println("Expected Value for 0 ", predict_with_offset(0.0,1,12,"ADL"))
+#println("Expected Value for 1 ", predict_with_offset(1.0,1,12,"ADL"))
+#println("Expected Value for 2 ", predict_with_offset(2.0,1,12,"ADL"))
+#println("Expected Value for -1 ", predict_with_offset(-1.0,1,12,"ADL"))
+#println("Expected Value for 0 ", predict_with_offset(0.0,1,12,"HND"))
+#println("Expected Value for 1 ", predict_with_offset(1.0,1,12,"HND"))
+#println("Expected Value for 2 ", predict_with_offset(2.0,1,12,"HND"))
+#println("Expected Value for -1 ", predict_with_offset(-1.0,1,12,"HND"))
